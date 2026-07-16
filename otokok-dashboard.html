@@ -205,16 +205,13 @@ tr:hover td{background:#f8f9ff}
 </div>
 
 <script>
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQLcRZbWVp7odM3L34-8VpDCLKQJam1DHck_i-j5cwEk7ZfCjM7RXZaZA6o_lAeKsqLCDqpxC4dIw0u/pub?output=csv';
+const CSV_URL = 'https://script.google.com/macros/s/AKfycbzWqSD5IPIcwsM_KCCQVbTHWwbzTdPUeGeTWxPqix7zGrLRg15vXssVnOy8dXWnhpKjGw/exec';
 
 /* ── CSV PARSER ── */
 function parseCSV(text) {
-  const rows = [];
-  const lines = text.replace(/
-/g,'
-').replace(//g,'
-').split('
-');
+  var CR=String.fromCharCode(13),LF=String.fromCharCode(10);
+  var rows = [];
+  var lines = text.replace(new RegExp(CR+LF,'g'),LF).replace(new RegExp(CR,'g'),LF).split(LF);
   for (var i=0;i<lines.length;i++) {
     var line=lines[i], fields=[], field='', inQ=false;
     for (var j=0;j<line.length;j++) {
@@ -328,44 +325,83 @@ var MO_LABELS={'2026-01':'Oca','2026-02':'Şub','2026-03':'Mar','2026-04':'Nis',
 var selMonths=new Set(ALL_MONTHS), granularity='monthly', activeTab='g';
 
 /* ── FETCH & PROCESS ── */
-async function fetchWithTimeout(url, ms) {
-  var ctrl=new AbortController();
-  var t=setTimeout(function(){ctrl.abort();},ms);
-  try { var r=await fetch(url,{signal:ctrl.signal}); clearTimeout(t); return r; }
-  catch(e) { clearTimeout(t); throw e; }
+const SHEET_ID='1dJp6MAp28nHv_2miPfizOwgAOrrD7wXVJyGXh8KElt0';
+
+function setOvMsg(t){document.getElementById('ov-msg').textContent=t;}
+
+/* gviz JSONP — script tag, CORS yok */
+function gvizLoad(sheetId,ms){
+  return new Promise(function(resolve,reject){
+    var cb='_gscb'+Date.now();
+    var sc=document.createElement('script');
+    var timer=setTimeout(function(){cleanup();reject(new Error('gviz timeout'));},ms||12000);
+    function cleanup(){sc.remove();try{delete window[cb];}catch(e){}}
+    window[cb]=function(d){clearTimeout(timer);cleanup();resolve(d);};
+    sc.onerror=function(){clearTimeout(timer);cleanup();reject(new Error('gviz script error'));};
+    sc.src='https://docs.google.com/spreadsheets/d/'+sheetId+'/gviz/tq?tqx=out:json&callback='+cb+'&t='+Date.now();
+    document.head.appendChild(sc);
+  });
 }
-async function fetchCSV() {
-  var proxy='https://corsproxy.io/?'+encodeURIComponent(CSV_URL);
-  var attempts=[
-    {url:CSV_URL+'&t='+Date.now(), label:'doğrudan'},
-    {url:proxy, label:'proxy'}
-  ];
-  for (var i=0;i<attempts.length;i++) {
-    try {
-      document.getElementById('ov-msg').textContent='Veriler yükleniyor… ('+attempts[i].label+')';
-      var res=await fetchWithTimeout(attempts[i].url, 12000);
-      if (!res.ok) throw new Error('HTTP '+res.status);
-      return await res.text();
-    } catch(e) {
-      if (i===attempts.length-1) throw e;
+
+/* gviz DataTable → rows array (same shape as parseCSV output) */
+function gvizToRows(data){
+  var t=data.table, rows=[];
+  rows.push(t.cols.map(function(c){return c.label||c.id||'';}));
+  (t.rows||[]).forEach(function(r){
+    rows.push((r.c||[]).map(function(cell){
+      if(!cell||cell.v===null||cell.v===undefined)return '';
+      var v=cell.v;
+      if(typeof v==='string'&&v.indexOf('Date(')===0){
+        var m=v.match(/Date\((\d+),(\d+),(\d+)\)/);
+        if(m)return m[1]+'-'+String(+m[2]+1).padStart(2,'0')+'-'+String(+m[3]).padStart(2,'0');
+      }
+      return String(v);
+    }));
+  });
+  return rows;
+}
+
+/* fetch fallback with AbortController */
+function fetchT(url,ms){
+  var ctrl=new AbortController();
+  var timer=setTimeout(function(){ctrl.abort();},ms);
+  return fetch(url,{signal:ctrl.signal,cache:'no-store'})
+    .then(function(r){clearTimeout(timer);if(!r.ok)throw new Error('HTTP '+r.status);return r.text();})
+    .catch(function(e){clearTimeout(timer);throw e;});
+}
+
+async function doRefresh(){
+  document.getElementById('ov').style.display='flex';
+  var rows=null;
+
+  /* 1 — gviz JSONP (CORS yok, file:// ve HTTPS'te çalışır) */
+  try{
+    setOvMsg('Bağlanıyor… (1/3 gviz)');
+    var gd=await gvizLoad(SHEET_ID,12000);
+    rows=gvizToRows(gd);
+  }catch(e1){
+    /* 2 — doğrudan fetch */
+    try{
+      setOvMsg('Bağlanıyor… (2/3 fetch)');
+      var csv=await fetchT(CSV_URL+'&t='+Date.now(),10000);
+      rows=parseCSV(csv);
+    }catch(e2){
+      /* 3 — corsproxy */
+      try{
+        setOvMsg('Bağlanıyor… (3/3 proxy)');
+        var csv2=await fetchT('https://corsproxy.io/?'+encodeURIComponent(CSV_URL),10000);
+        rows=parseCSV(csv2);
+      }catch(e3){
+        setOvMsg('Veri alınamadı. Hata: '+e3.message+' — Sayfayı yenileyin.');
+        return;
+      }
     }
   }
-}
-async function doRefresh() {
-  document.getElementById('ov').style.display='flex';
-  document.getElementById('ov-msg').textContent='Veriler yükleniyor…';
-  try {
-    var text=await fetchCSV();
-    var rows=parseCSV(text);
-    var processed=processCSV(rows);
-    DAILY=processed.daily;
-    MO_CAMPS=processed.moCamps;
-    document.getElementById('updtime').textContent='Güncellendi: '+new Date().toLocaleTimeString('tr-TR');
-  } catch(e) {
-    document.getElementById('ov-msg').textContent='Bağlantı hatası: '+e.message;
-    setTimeout(function(){document.getElementById('ov').style.display='none';},4000);
-    return;
-  }
+
+  var processed=processCSV(rows);
+  DAILY=processed.daily;
+  MO_CAMPS=processed.moCamps;
+  document.getElementById('updtime').textContent='Güncellendi: '+new Date().toLocaleTimeString('tr-TR');
   document.getElementById('ov').style.display='none';
   renderAll();
 }
