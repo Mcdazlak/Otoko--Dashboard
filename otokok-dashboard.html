@@ -84,10 +84,29 @@ tr:hover td{background:#f8f9ff}
 .br{display:flex;align-items:center;gap:5px;justify-content:flex-end}
 .bg{width:55px;height:4px;background:#eee;border-radius:3px;overflow:hidden}
 .bf{height:100%;border-radius:3px}
+/* login */
+#login-wall{position:fixed;inset:0;background:#1a1a2e;z-index:9999;display:flex;align-items:center;justify-content:center}
+.login-box{background:#fff;border-radius:16px;padding:36px 40px;width:320px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.login-box h2{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+.login-box p{font-size:12px;color:#aaa;margin-bottom:22px}
+.login-box input{width:100%;border:1.5px solid #ddd;border-radius:8px;padding:10px 14px;font-size:14px;outline:none;transition:.15s}
+.login-box input:focus{border-color:#e63946}
+.login-box button{margin-top:12px;width:100%;background:#e63946;color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;transition:.15s}
+.login-box button:hover{background:#c1121f}
+.login-err{color:#e63946;font-size:12px;margin-top:10px;min-height:16px}
 </style>
 </head>
 <body>
-<div id="ov"><div class="sp"></div><span id="ov-msg">Veriler yükleniyor…</span></div>
+<div id="login-wall">
+  <div class="login-box">
+    <h2>Otokoç · Meta Ads</h2>
+    <p>Devam etmek için şifrenizi girin</p>
+    <input type="password" id="pw-input" placeholder="Şifre" onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">Giriş</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+<div id="ov" style="display:none"><div class="sp"></div><span id="ov-msg">Veriler yükleniyor…</span></div>
 
 <header>
   <div><h1>Otokoç · Meta Ads</h1><div class="hsub" id="hdrsub">2026 YTD · 13 Hesap</div></div>
@@ -176,7 +195,8 @@ tr:hover td{background:#f8f9ff}
 </div>
 
 <script>
-const CSV_URL='https://script.google.com/macros/s/AKfycbzWqSD5IPIcwsM_KCCQVbTHWwbzTdPUeGeTWxPqix7zGrLRg15vXssVnOy8dXWnhpKjGw/exec';
+const PROXY='https://script.google.com/macros/s/AKfycbzWqSD5IPIcwsM_KCCQVbTHWwbzTdPUeGeTWxPqix7zGrLRg15vXssVnOy8dXWnhpKjGw/exec';
+var SESSION_PW='';
 
 /* ── ACCOUNT CONFIG ── */
 const ACCS={
@@ -333,15 +353,33 @@ function jsonpFetch(url,ms){
     function cleanup(){sc.remove();try{delete window[cb];}catch(e){}}
     window[cb]=function(data){clearTimeout(timer);cleanup();resolve(data);};
     sc.onerror=function(){clearTimeout(timer);cleanup();reject(new Error('Script yüklenemedi'));};
-    sc.src=url+'?callback='+cb+'&t='+Date.now();
+    sc.src=url+'?callback='+cb+'&pw='+encodeURIComponent(SESSION_PW)+'&t='+Date.now();
     document.head.appendChild(sc);
   });
+}
+async function doLogin(){
+  var pw=document.getElementById('pw-input').value.trim();
+  var errEl=document.getElementById('login-err');
+  if(!pw){errEl.textContent='Şifre boş olamaz.';return;}
+  errEl.textContent='Kontrol ediliyor…';
+  SESSION_PW=pw;
+  try{
+    var csv=await jsonpFetch(PROXY,15000);
+    if(typeof csv==='object'&&csv.error){SESSION_PW='';errEl.textContent='Şifre yanlış.';return;}
+    sessionStorage.setItem('dash_pw',pw);
+    document.getElementById('login-wall').style.display='none';
+    var rows=parseCSV(csv);
+    var p=processCSV(rows);
+    DAILY=p.daily;MO_CAMPS=p.moCamps;
+    document.getElementById('updtime').textContent='Güncellendi: '+new Date().toLocaleTimeString('tr-TR');
+    renderAll();
+  }catch(e){SESSION_PW='';errEl.textContent='Bağlantı hatası: '+e.message;}
 }
 async function doRefresh(){
   document.getElementById('ov').style.display='flex';
   setOvMsg('Veriler yükleniyor…');
   try{
-    var csv=await jsonpFetch(CSV_URL,20000);
+    var csv=await jsonpFetch(PROXY,20000);
     var rows=parseCSV(csv);
     var p=processCSV(rows);
     DAILY=p.daily;MO_CAMPS=p.moCamps;
@@ -576,7 +614,15 @@ function goTab(name,btn){
   renderAll();
 }
 
-doRefresh();
+/* Sayfa açılınca sessionStorage'da şifre varsa direkt yükle */
+(function(){
+  var saved=sessionStorage.getItem('dash_pw');
+  if(saved){
+    SESSION_PW=saved;
+    document.getElementById('login-wall').style.display='none';
+    doRefresh();
+  }
+})();
 </script>
 </body>
 </html>
