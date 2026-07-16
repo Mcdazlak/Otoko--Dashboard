@@ -325,85 +325,37 @@ var MO_LABELS={'2026-01':'Oca','2026-02':'Şub','2026-03':'Mar','2026-04':'Nis',
 var selMonths=new Set(ALL_MONTHS), granularity='monthly', activeTab='g';
 
 /* ── FETCH & PROCESS ── */
-const SHEET_ID='1dJp6MAp28nHv_2miPfizOwgAOrrD7wXVJyGXh8KElt0';
-
 function setOvMsg(t){document.getElementById('ov-msg').textContent=t;}
 
-/* gviz JSONP — script tag, CORS yok */
-function gvizLoad(sheetId,ms){
+/* JSONP — script tag ile, CORS ve file:// sorunu yok */
+function jsonpFetch(url,ms){
   return new Promise(function(resolve,reject){
-    var cb='_gscb'+Date.now();
+    var cb='_jscb'+Date.now();
     var sc=document.createElement('script');
-    var timer=setTimeout(function(){cleanup();reject(new Error('gviz timeout'));},ms||12000);
+    var timer=setTimeout(function(){cleanup();reject(new Error('Timeout ('+Math.round(ms/1000)+'s)'));},ms||15000);
     function cleanup(){sc.remove();try{delete window[cb];}catch(e){}}
-    window[cb]=function(d){clearTimeout(timer);cleanup();resolve(d);};
-    sc.onerror=function(){clearTimeout(timer);cleanup();reject(new Error('gviz script error'));};
-    sc.src='https://docs.google.com/spreadsheets/d/'+sheetId+'/gviz/tq?tqx=out:json&callback='+cb+'&t='+Date.now();
+    window[cb]=function(data){clearTimeout(timer);cleanup();resolve(data);};
+    sc.onerror=function(){clearTimeout(timer);cleanup();reject(new Error('Script yüklenemedi'));};
+    sc.src=url+'?callback='+cb+'&t='+Date.now();
     document.head.appendChild(sc);
   });
 }
 
-/* gviz DataTable → rows array (same shape as parseCSV output) */
-function gvizToRows(data){
-  var t=data.table, rows=[];
-  rows.push(t.cols.map(function(c){return c.label||c.id||'';}));
-  (t.rows||[]).forEach(function(r){
-    rows.push((r.c||[]).map(function(cell){
-      if(!cell||cell.v===null||cell.v===undefined)return '';
-      var v=cell.v;
-      if(typeof v==='string'&&v.indexOf('Date(')===0){
-        var m=v.match(/Date\((\d+),(\d+),(\d+)\)/);
-        if(m)return m[1]+'-'+String(+m[2]+1).padStart(2,'0')+'-'+String(+m[3]).padStart(2,'0');
-      }
-      return String(v);
-    }));
-  });
-  return rows;
-}
-
-/* fetch fallback with AbortController */
-function fetchT(url,ms){
-  var ctrl=new AbortController();
-  var timer=setTimeout(function(){ctrl.abort();},ms);
-  return fetch(url,{signal:ctrl.signal,cache:'no-store'})
-    .then(function(r){clearTimeout(timer);if(!r.ok)throw new Error('HTTP '+r.status);return r.text();})
-    .catch(function(e){clearTimeout(timer);throw e;});
-}
-
 async function doRefresh(){
   document.getElementById('ov').style.display='flex';
-  var rows=null;
-
-  /* 1 — gviz JSONP (CORS yok, file:// ve HTTPS'te çalışır) */
+  setOvMsg('Veriler yükleniyor…');
   try{
-    setOvMsg('Bağlanıyor… (1/3 gviz)');
-    var gd=await gvizLoad(SHEET_ID,12000);
-    rows=gvizToRows(gd);
-  }catch(e1){
-    /* 2 — doğrudan fetch */
-    try{
-      setOvMsg('Bağlanıyor… (2/3 fetch)');
-      var csv=await fetchT(CSV_URL+'&t='+Date.now(),10000);
-      rows=parseCSV(csv);
-    }catch(e2){
-      /* 3 — corsproxy */
-      try{
-        setOvMsg('Bağlanıyor… (3/3 proxy)');
-        var csv2=await fetchT('https://corsproxy.io/?'+encodeURIComponent(CSV_URL),10000);
-        rows=parseCSV(csv2);
-      }catch(e3){
-        setOvMsg('Veri alınamadı. Hata: '+e3.message+' — Sayfayı yenileyin.');
-        return;
-      }
-    }
+    var csv=await jsonpFetch(CSV_URL,20000);
+    var rows=parseCSV(csv);
+    var processed=processCSV(rows);
+    DAILY=processed.daily;
+    MO_CAMPS=processed.moCamps;
+    document.getElementById('updtime').textContent='Güncellendi: '+new Date().toLocaleTimeString('tr-TR');
+    document.getElementById('ov').style.display='none';
+    renderAll();
+  }catch(e){
+    setOvMsg('Veri alınamadı: '+e.message+' — Sayfayı yenileyin.');
   }
-
-  var processed=processCSV(rows);
-  DAILY=processed.daily;
-  MO_CAMPS=processed.moCamps;
-  document.getElementById('updtime').textContent='Güncellendi: '+new Date().toLocaleTimeString('tr-TR');
-  document.getElementById('ov').style.display='none';
-  renderAll();
 }
 setInterval(doRefresh, 30*60*1000);
 
