@@ -328,13 +328,34 @@ var MO_LABELS={'2026-01':'Oca','2026-02':'Şub','2026-03':'Mar','2026-04':'Nis',
 var selMonths=new Set(ALL_MONTHS), granularity='monthly', activeTab='g';
 
 /* ── FETCH & PROCESS ── */
+async function fetchWithTimeout(url, ms) {
+  var ctrl=new AbortController();
+  var t=setTimeout(function(){ctrl.abort();},ms);
+  try { var r=await fetch(url,{signal:ctrl.signal}); clearTimeout(t); return r; }
+  catch(e) { clearTimeout(t); throw e; }
+}
+async function fetchCSV() {
+  var proxy='https://corsproxy.io/?'+encodeURIComponent(CSV_URL);
+  var attempts=[
+    {url:CSV_URL+'&t='+Date.now(), label:'doğrudan'},
+    {url:proxy, label:'proxy'}
+  ];
+  for (var i=0;i<attempts.length;i++) {
+    try {
+      document.getElementById('ov-msg').textContent='Veriler yükleniyor… ('+attempts[i].label+')';
+      var res=await fetchWithTimeout(attempts[i].url, 12000);
+      if (!res.ok) throw new Error('HTTP '+res.status);
+      return await res.text();
+    } catch(e) {
+      if (i===attempts.length-1) throw e;
+    }
+  }
+}
 async function doRefresh() {
   document.getElementById('ov').style.display='flex';
   document.getElementById('ov-msg').textContent='Veriler yükleniyor…';
   try {
-    var res=await fetch(CSV_URL+'&t='+Date.now());
-    if (!res.ok) throw new Error('HTTP '+res.status);
-    var text=await res.text();
+    var text=await fetchCSV();
     var rows=parseCSV(text);
     var processed=processCSV(rows);
     DAILY=processed.daily;
@@ -342,7 +363,7 @@ async function doRefresh() {
     document.getElementById('updtime').textContent='Güncellendi: '+new Date().toLocaleTimeString('tr-TR');
   } catch(e) {
     document.getElementById('ov-msg').textContent='Bağlantı hatası: '+e.message;
-    setTimeout(function(){document.getElementById('ov').style.display='none';},3000);
+    setTimeout(function(){document.getElementById('ov').style.display='none';},4000);
     return;
   }
   document.getElementById('ov').style.display='none';
