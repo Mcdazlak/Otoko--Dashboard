@@ -3,83 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Otokoç Meta Ads · 2026 YTD</title>
+<title>Otokoç · Meta Ads 2026</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f2f5;color:#1a1a2e;font-size:14px}
-header{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.3)}
-header h1{font-size:17px;font-weight:700;letter-spacing:-.3px}
-.hsub{font-size:11px;opacity:.45;margin-top:1px}
+header{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+header h1{font-size:16px;font-weight:700}
+.hsub{font-size:11px;opacity:.4;margin-top:2px}
 .hright{display:flex;align-items:center;gap:10px}
-.upd{font-size:10.5px;opacity:.4}
+.upd{font-size:10px;opacity:.35}
 .rbtn{background:rgba(255,255,255,.12);border:none;color:#fff;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-weight:700}
 .rbtn:hover{background:rgba(255,255,255,.22)}
-.badge{background:#e63946;color:#fff;font-size:10.5px;padding:3px 9px;border-radius:20px;font-weight:700;letter-spacing:.7px}
-nav{display:flex;background:#fff;border-bottom:2px solid #eee;padding:0 24px;position:sticky;top:0;z-index:20;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-nav button{border:none;background:none;padding:11px 16px;font-size:13px;font-weight:600;cursor:pointer;color:#888;border-bottom:3px solid transparent;transition:.15s}
+.badge{background:#e63946;color:#fff;font-size:10px;padding:3px 8px;border-radius:20px;font-weight:700}
+nav{display:flex;background:#fff;border-bottom:2px solid #eee;padding:0 20px;position:sticky;top:0;z-index:20;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+nav button{border:none;background:none;padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;color:#888;border-bottom:3px solid transparent;transition:.15s;white-space:nowrap}
 nav button.active{color:#1a1a2e;border-bottom-color:#e63946}
-.fbar{background:#fff;border-bottom:1px solid #e8e8e8;padding:10px 24px;display:flex;align-items:center;gap:20px;position:sticky;top:48px;z-index:19;flex-wrap:wrap}
-.fbar-group{display:flex;align-items:center;gap:7px}
-.fbar-label{font-size:10.5px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
-.mpill{border:1.5px solid #ddd;background:#fff;color:#888;font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:20px;cursor:pointer;transition:.12s;white-space:nowrap}
+.fbar{background:#fff;border-bottom:1px solid #e8e8e8;padding:8px 20px;display:flex;align-items:center;gap:16px;position:sticky;top:45px;z-index:19;flex-wrap:wrap}
+.fbar-group{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fbar-label{font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.mpill{border:1.5px solid #ddd;background:#fff;color:#888;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;cursor:pointer;transition:.12s;white-space:nowrap}
 .mpill:hover{border-color:#888;color:#333}
 .mpill.active{background:#1a1a2e;border-color:#1a1a2e;color:#fff}
 .mpill.all.active{background:#e63946;border-color:#e63946;color:#fff}
-.mpill:disabled{opacity:.35;cursor:default;pointer-events:none}
-.fbar-sep{width:1px;height:24px;background:#eee}
-.gran-group{display:flex;border:1.5px solid #ddd;border-radius:8px;overflow:hidden}
-.gbtn{border:none;background:#fff;color:#888;font-size:11.5px;font-weight:600;padding:5px 14px;cursor:pointer;transition:.12s;border-right:1px solid #ddd}
+.fbar-sep{width:1px;height:22px;background:#eee;flex-shrink:0}
+.gran-group{display:flex;border:1.5px solid #ddd;border-radius:7px;overflow:hidden}
+.gbtn{border:none;background:#fff;color:#888;font-size:11px;font-weight:600;padding:4px 12px;cursor:pointer;transition:.12s;border-right:1px solid #ddd}
 .gbtn:last-child{border-right:none}
 .gbtn.active{background:#1a1a2e;color:#fff}
-.tab{display:none;padding:16px 24px 48px}
+.tab{display:none;padding:14px 20px 48px}
 .tab.active{display:block}
-.krow{display:grid;gap:10px;margin-bottom:14px}
-.k4{grid-template-columns:repeat(4,1fr)}.k3{grid-template-columns:repeat(3,1fr)}
-.kpi{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #e0e0e0;transition:transform .12s}
-.kpi:hover{transform:translateY(-2px)}
-.kpi.r{border-color:#e63946}.kpi.g{border-color:#2a9d8f}.kpi.b{border-color:#457b9d}
-.kpi.o{border-color:#f4a261}.kpi.t{border-color:#00b8d4}.kpi.p{border-color:#e07ab1}
-.kl{font-size:10px;color:#aaa;font-weight:700;text-transform:uppercase;letter-spacing:.7px}
-.kv{font-size:21px;font-weight:700;margin:4px 0 1px;color:#1a1a2e;letter-spacing:-.4px}
+/* sub-tabs */
+.stabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.stab{border:1.5px solid #ddd;background:#fff;color:#666;font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;cursor:pointer;transition:.15s}
+.stab:hover{border-color:#aaa;color:#333}
+.stab.active{color:#fff;border-color:transparent}
+/* kpi */
+.krow{display:grid;gap:10px;margin-bottom:12px}
+.k4{grid-template-columns:repeat(4,1fr)}
+.k3{grid-template-columns:repeat(3,1fr)}
+.k2{grid-template-columns:repeat(2,1fr)}
+.kpi{background:#fff;border-radius:10px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #e0e0e0}
+.kpi:hover{transform:translateY(-1px)}
+.kl{font-size:10px;color:#aaa;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.kv{font-size:20px;font-weight:700;margin:3px 0 1px;color:#1a1a2e;letter-spacing:-.3px}
 .ks{font-size:10px;color:#ccc}
-.crow{display:grid;gap:10px;margin-bottom:14px}
-.c2{grid-template-columns:3fr 2fr}.c1{grid-template-columns:1fr}.ceq{grid-template-columns:1fr 1fr}
-.cc{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+/* charts */
+.crow{display:grid;gap:10px;margin-bottom:12px}
+.c2{grid-template-columns:3fr 2fr}
+.c1{grid-template-columns:1fr}
+.ceq{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:1fr 1fr 1fr}
+.cc{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .cc h3{font-size:10px;font-weight:700;color:#777;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-.cw{position:relative;height:200px}
-.arow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
-.ac{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.ac h2{font-size:12.5px;font-weight:700;margin-bottom:9px;padding-bottom:7px;border-bottom:2px solid #f4f4f4;display:flex;align-items:center;gap:5px}
-.atype{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:4px}
-.conv{background:#e6f0ff;color:#1a4f8a}.lead{background:#e6faf5;color:#1a6a5a}
-.mr{display:flex;justify-content:space-between;margin:5px 0;font-size:11.5px}
-.ml{color:#aaa}.mv{font-weight:700;color:#1a1a2e}
-.tw{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow-x:auto;margin-bottom:14px}
+.cw{position:relative;height:190px}
+/* table */
+.tw{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow-x:auto;margin-bottom:12px}
 .tw h3{font-size:10px;font-weight:700;color:#777;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
 table{width:100%;border-collapse:collapse;font-size:12px}
-th{background:#f8f9fa;padding:7px 10px;text-align:left;font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;color:#aaa;font-weight:700;border-bottom:2px solid #eee;white-space:nowrap}
+th{background:#f8f9fa;padding:6px 10px;text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:#aaa;font-weight:700;border-bottom:2px solid #eee;white-space:nowrap}
 th:not(:first-child){text-align:right}
-td{padding:7px 10px;border-bottom:1px solid #f2f2f2;color:#333}
+td{padding:6px 10px;border-bottom:1px solid #f2f2f2;color:#333}
 td:not(:first-child){text-align:right}
-td:first-child{font-weight:600;color:#1a1a2e;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+td:first-child{font-weight:600;color:#1a1a2e;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 tr:hover td{background:#f8f9ff}
-.pill{display:inline-block;padding:2px 7px;border-radius:20px;font-weight:700;font-size:10.5px}
-.phi{background:#d4edda;color:#155724}.pmi{background:#fff3cd;color:#856404}.plo{background:#f8d7da;color:#721c24}.pna{background:#f0f0f0;color:#aaa}
-.br{display:flex;align-items:center;gap:5px;justify-content:flex-end}
-.bg{width:65px;height:4px;background:#eee;border-radius:3px;overflow:hidden}
-.bf{height:100%;border-radius:3px}
+/* genel grid */
+.g-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.g-mini{background:#fff;border-radius:10px;padding:10px 13px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #ccc}
+.gm-name{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.4px}
+.gm-sp{font-size:18px;font-weight:700;margin:2px 0;letter-spacing:-.3px}
+.gm-sub{font-size:10px;color:#bbb}
+/* overlay */
 #ov{display:flex;position:fixed;inset:0;background:rgba(26,26,46,.92);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:14px;color:#fff;font-weight:600;font-size:14px}
-.sp{width:38px;height:38px;border:3px solid rgba(255,255,255,.2);border-top-color:#e63946;border-radius:50%;animation:spin .8s linear infinite}
+.sp{width:36px;height:36px;border:3px solid rgba(255,255,255,.2);border-top-color:#e63946;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.err{background:#e63946;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;text-align:center;max-width:340px;line-height:1.5}
+/* pills */
+.pill{display:inline-block;padding:2px 7px;border-radius:20px;font-weight:700;font-size:10px}
+.phi{background:#d4edda;color:#155724}.pmi{background:#fff3cd;color:#856404}.plo{background:#f8d7da;color:#721c24}.pna{background:#f0f0f0;color:#aaa}
+/* bar */
+.br{display:flex;align-items:center;gap:5px;justify-content:flex-end}
+.bg{width:55px;height:4px;background:#eee;border-radius:3px;overflow:hidden}
+.bf{height:100%;border-radius:3px}
 </style>
 </head>
 <body>
 <div id="ov"><div class="sp"></div><span id="ov-msg">Veriler yükleniyor…</span></div>
 
 <header>
-  <div><h1>Otokoç · Meta Ads</h1><div class="hsub" id="hdrsub">2026 YTD · Facebook &amp; Instagram</div></div>
+  <div><h1>Otokoç · Meta Ads</h1><div class="hsub" id="hdrsub">2026 YTD · 13 Hesap</div></div>
   <div class="hright">
     <span class="upd" id="updtime"></span>
     <button class="rbtn" onclick="doRefresh()">&#8635; Yenile</button>
@@ -89,9 +100,9 @@ tr:hover td{background:#f8f9ff}
 
 <nav>
   <button class="active" onclick="goTab('g',this)">Genel Bakış</button>
-  <button onclick="goTab('a',this)">AVİS</button>
-  <button onclick="goTab('k',this)">Otokoç 2.El</button>
-  <button onclick="goTab('v',this)">Volvo</button>
+  <button onclick="goTab('k',this)">Kiralama</button>
+  <button onclick="goTab('e',this)">2.El</button>
+  <button onclick="goTab('b',this)">Bayiler</button>
 </nav>
 
 <div class="fbar">
@@ -113,7 +124,6 @@ tr:hover td{background:#f8f9ff}
   </div>
   <div class="fbar-sep"></div>
   <div class="fbar-group">
-    <span class="fbar-label">Görünüm</span>
     <div class="gran-group">
       <button class="gbtn active" data-gran="monthly" onclick="setGran(this)">Aylık</button>
       <button class="gbtn" data-gran="weekly" onclick="setGran(this)">Haftalık</button>
@@ -122,217 +132,204 @@ tr:hover td{background:#f8f9ff}
   </div>
 </div>
 
+<!-- GENEL BAKIŞ -->
 <div id="tab-g" class="tab active">
-  <div class="arow">
-    <div class="ac"><h2>AVİS <span class="atype conv">Conversion + Lead</span></h2>
-      <div class="mr"><span class="ml">Harcama</span><span class="mv" id="ga-sp">—</span></div>
-      <div class="mr"><span class="ml">ROAS (Catalog)</span><span class="mv" id="ga-roas">—</span></div>
-      <div class="mr"><span class="ml">Lead (KD)</span><span class="mv" id="ga-leads">—</span></div>
-      <div class="mr"><span class="ml">CPL (KD)</span><span class="mv" id="ga-cpl">—</span></div>
-    </div>
-    <div class="ac"><h2>Otokoç 2.El <span class="atype lead">Lead Gen</span></h2>
-      <div class="mr"><span class="ml">Harcama</span><span class="mv" id="gk-sp">—</span></div>
-      <div class="mr"><span class="ml">Toplam Lead</span><span class="mv" id="gk-leads">—</span></div>
-      <div class="mr"><span class="ml">Ort. CPL</span><span class="mv" id="gk-cpl">—</span></div>
-      <div class="mr"><span class="ml">Kampanya</span><span class="mv" id="gk-camps">—</span></div>
-    </div>
-    <div class="ac"><h2>Otokoç Volvo <span class="atype lead">Lead Gen</span></h2>
-      <div class="mr"><span class="ml">Harcama</span><span class="mv" id="gv-sp">—</span></div>
-      <div class="mr"><span class="ml">Toplam Lead</span><span class="mv" id="gv-leads">—</span></div>
-      <div class="mr"><span class="ml">Ort. CPL</span><span class="mv" id="gv-cpl">—</span></div>
-      <div class="mr"><span class="ml">Kampanya</span><span class="mv" id="gv-camps">—</span></div>
-    </div>
-  </div>
+  <div class="g-grid" id="g-minicards"></div>
   <div class="crow c2">
     <div class="cc"><h3>Toplam Harcama (₺)</h3><div class="cw"><canvas id="g-sp"></canvas></div></div>
-    <div class="cc"><h3>Dağılım</h3><div class="cw"><canvas id="g-pie"></canvas></div></div>
+    <div class="cc"><h3>Harcama Dağılımı</h3><div class="cw"><canvas id="g-pie"></canvas></div></div>
   </div>
   <div class="crow ceq">
-    <div class="cc"><h3>Lead — 2.El</h3><div class="cw"><canvas id="g-lk"></canvas></div></div>
-    <div class="cc"><h3>Lead — Volvo</h3><div class="cw"><canvas id="g-lv"></canvas></div></div>
+    <div class="cc"><h3>Lead Sayısı</h3><div class="cw"><canvas id="g-leads"></canvas></div></div>
+    <div class="cc"><h3>Hesap Karşılaştırma</h3><div class="cw"><canvas id="g-cmp"></canvas></div></div>
   </div>
 </div>
 
-<div id="tab-a" class="tab">
-  <div class="krow k4">
-    <div class="kpi r"><div class="kl">Harcama</div><div class="kv" id="a-sp">—</div><div class="ks" id="a-sp-s">—</div></div>
-    <div class="kpi g"><div class="kl">ROAS (Catalog)</div><div class="kv" id="a-roas">—</div><div class="ks">Ağırlıklı ort.</div></div>
-    <div class="kpi b"><div class="kl">Lead (KD Kurumsal)</div><div class="kv" id="a-leads">—</div><div class="ks">Kiralama talepleri</div></div>
-    <div class="kpi o"><div class="kl">CPL (KD)</div><div class="kv" id="a-cpl">—</div><div class="ks">Lead başına maliyet</div></div>
-  </div>
-  <div class="crow ceq">
-    <div class="cc"><h3>ROAS — Catalog Sales</h3><div class="cw"><canvas id="a-roas-c"></canvas></div></div>
-    <div class="cc"><h3>Lead &amp; CPL — KD Kurumsal</h3><div class="cw"><canvas id="a-lead-c"></canvas></div></div>
-  </div>
-  <div class="crow c1"><div class="cc"><h3>Harcama (₺)</h3><div class="cw"><canvas id="a-sp-c"></canvas></div></div></div>
-  <div class="tw"><h3>Kampanya Performansı</h3>
-    <table><thead><tr><th>Kampanya</th><th>Harcama</th><th>Lead</th><th>CPL</th><th>ROAS</th><th>Tıklama</th></tr></thead>
-    <tbody id="a-tbl"></tbody></table></div>
-</div>
-
+<!-- KİRALAMA -->
 <div id="tab-k" class="tab">
-  <div class="krow k4">
-    <div class="kpi r"><div class="kl">Harcama</div><div class="kv" id="k-sp">—</div><div class="ks" id="k-sp-s">—</div></div>
-    <div class="kpi t"><div class="kl">Toplam Lead</div><div class="kv" id="k-leads">—</div><div class="ks">On-Facebook leads</div></div>
-    <div class="kpi p"><div class="kl">Ort. CPL</div><div class="kv" id="k-cpl">—</div><div class="ks">Lead başına maliyet</div></div>
-    <div class="kpi b"><div class="kl">Tıklama</div><div class="kv" id="k-clk">—</div><div class="ks">Tüm kampanyalar</div></div>
-  </div>
-  <div class="crow ceq">
-    <div class="cc"><h3>Lead Sayısı</h3><div class="cw"><canvas id="k-lead-c"></canvas></div></div>
-    <div class="cc"><h3>CPL (₺)</h3><div class="cw"><canvas id="k-cpl-c"></canvas></div></div>
-  </div>
-  <div class="crow c1"><div class="cc"><h3>Harcama (₺)</h3><div class="cw"><canvas id="k-sp-c"></canvas></div></div></div>
-  <div class="tw"><h3>Kampanya Performansı</h3>
-    <table><thead><tr><th>Kampanya</th><th>Harcama</th><th>Lead</th><th>CPL</th><th>Tıklama</th></tr></thead>
-    <tbody id="k-tbl"></tbody></table></div>
+  <div class="stabs" id="k-stabs"></div>
+  <div id="k-content"></div>
 </div>
 
-<div id="tab-v" class="tab">
+<!-- 2.EL -->
+<div id="tab-e" class="tab">
   <div class="krow k4">
-    <div class="kpi r"><div class="kl">Harcama</div><div class="kv" id="v-sp">—</div><div class="ks" id="v-sp-s">—</div></div>
-    <div class="kpi t"><div class="kl">Toplam Lead</div><div class="kv" id="v-leads">—</div><div class="ks">On-Facebook leads</div></div>
-    <div class="kpi p"><div class="kl">Ort. CPL</div><div class="kv" id="v-cpl">—</div><div class="ks">Lead başına maliyet</div></div>
-    <div class="kpi b"><div class="kl">Tıklama</div><div class="kv" id="v-clk">—</div><div class="ks">Tüm kampanyalar</div></div>
+    <div class="kpi" style="border-color:#457b9d"><div class="kl">Harcama</div><div class="kv" id="e-sp">—</div><div class="ks" id="e-sp-s"></div></div>
+    <div class="kpi" style="border-color:#00b8d4"><div class="kl">Toplam Lead</div><div class="kv" id="e-leads">—</div><div class="ks">On-Facebook</div></div>
+    <div class="kpi" style="border-color:#e07ab1"><div class="kl">Ort. CPL</div><div class="kv" id="e-cpl">—</div><div class="ks">Lead başına maliyet</div></div>
+    <div class="kpi" style="border-color:#888"><div class="kl">Tıklama</div><div class="kv" id="e-clk">—</div><div class="ks">Tüm kampanyalar</div></div>
   </div>
   <div class="crow ceq">
-    <div class="cc"><h3>Lead Sayısı</h3><div class="cw"><canvas id="v-lead-c"></canvas></div></div>
-    <div class="cc"><h3>CPL (₺)</h3><div class="cw"><canvas id="v-cpl-c"></canvas></div></div>
+    <div class="cc"><h3>Lead Sayısı</h3><div class="cw"><canvas id="e-lead-c"></canvas></div></div>
+    <div class="cc"><h3>CPL (₺)</h3><div class="cw"><canvas id="e-cpl-c"></canvas></div></div>
   </div>
-  <div class="crow c1"><div class="cc"><h3>Harcama (₺)</h3><div class="cw"><canvas id="v-sp-c"></canvas></div></div></div>
+  <div class="crow c1"><div class="cc"><h3>Harcama (₺)</h3><div class="cw"><canvas id="e-sp-c"></canvas></div></div></div>
   <div class="tw"><h3>Kampanya Performansı</h3>
     <table><thead><tr><th>Kampanya</th><th>Harcama</th><th>Lead</th><th>CPL</th><th>Tıklama</th></tr></thead>
-    <tbody id="v-tbl"></tbody></table></div>
+    <tbody id="e-tbl"></tbody></table></div>
+</div>
+
+<!-- BAYİLER -->
+<div id="tab-b" class="tab">
+  <div class="stabs" id="b-stabs"></div>
+  <div id="b-content"></div>
 </div>
 
 <script>
-const CSV_URL = 'https://script.google.com/macros/s/AKfycbzWqSD5IPIcwsM_KCCQVbTHWwbzTdPUeGeTWxPqix7zGrLRg15vXssVnOy8dXWnhpKjGw/exec';
+const CSV_URL='https://script.google.com/macros/s/AKfycbzWqSD5IPIcwsM_KCCQVbTHWwbzTdPUeGeTWxPqix7zGrLRg15vXssVnOy8dXWnhpKjGw/exec';
+
+/* ── ACCOUNT CONFIG ── */
+const ACCS={
+  'AVIS':        {name:'AVİS',           color:'#e63946', tab:'k'},
+  'AVIS_FILO':   {name:'AVİS Filo',      color:'#c1426b', tab:'k'},
+  'AVIS_ML':     {name:'AVİS Filo ML',   color:'#e07ab1', tab:'k'},
+  'BUDGET':      {name:'BUDGET',         color:'#f4a261', tab:'k'},
+  '2EL':         {name:'2.El',           color:'#457b9d', tab:'e'},
+  'ALFA':        {name:'Alfa Romeo',     color:'#8b0000', tab:'b'},
+  'CITROEN':     {name:'Citroën',        color:'#7b2d8b', tab:'b'},
+  'FIAT':        {name:'Fiat',           color:'#2196f3', tab:'b'},
+  'FORD':        {name:'Ford',           color:'#003087', tab:'b'},
+  'JEEP':        {name:'Jeep',           color:'#4a7c59', tab:'b'},
+  'MASERATI':    {name:'Maserati',       color:'#8b6914', tab:'b'},
+  'OPEL':        {name:'Opel',           color:'#e67e00', tab:'b'},
+  'PEUGEOT':     {name:'Peugeot',        color:'#555',    tab:'b'},
+  'VOLVO':       {name:'Volvo',          color:'#2a9d8f', tab:'b'},
+  'OTOKOC_GEN':  {name:'Otokoç Genel',   color:'#9b59b6', tab:'b'},
+};
+/* Hesap adına göre grup — OTOKOÇ // INGAGE için null döner, campaign'e bakılır */
+function accountGroup(raw){
+  var u=raw.toUpperCase();
+  if(u.indexOf('MAESTRO')>=0)return 'AVIS_ML';
+  if(u.indexOf('FİLO')>=0||u.indexOf('FILO')>=0)return 'AVIS_FILO';
+  if(u.indexOf('AVİS')>=0||u.indexOf('AVIS')>=0)return 'AVIS';
+  if(u.indexOf('BUDGET')>=0)return 'BUDGET';
+  if(u.indexOf('2.EL')>=0||u.indexOf('2EL')>=0||u.indexOf('İKİNCİ')>=0)return '2EL';
+  if(u.indexOf('ALFA')>=0)return 'ALFA';
+  if(u.indexOf('CITROEN')>=0||u.indexOf('CİTROEN')>=0)return 'CITROEN';
+  if(u.indexOf('FIAT')>=0||u.indexOf('FİAT')>=0)return 'FIAT';
+  if(u.indexOf('FORD')>=0)return 'FORD';
+  if(u.indexOf('JEEP')>=0)return 'JEEP';
+  if(u.indexOf('OPEL')>=0)return 'OPEL';
+  if(u.indexOf('PEUGEOT')>=0)return 'PEUGEOT';
+  if(u.indexOf('VOLVO')>=0)return 'VOLVO';
+  /* OTOKOÇ // INGAGE — eski ortak hesap, kampanya adına göre ayrıştır */
+  if(u.indexOf('OTOKOÇ')>=0||u.indexOf('OTOKOC')>=0)return '__MULTI__';
+  return null;
+}
+/* Eski OTOKOÇ hesabındaki kampanya adından marka çıkar */
+function campToGroup(camp){
+  var u=camp.toUpperCase();
+  if(u.indexOf('ALFA ROMEO')>=0)return 'ALFA';
+  if(u.indexOf('JEEP')>=0)return 'JEEP';
+  if(u.indexOf('MASERATI')>=0)return 'MASERATI';
+  if(u.indexOf('OTOKOÇ FIAT')>=0||u.indexOf('OTOKOC FIAT')>=0)return 'FIAT';
+  if(u.indexOf('OTOKOÇ FORD')>=0||u.indexOf('OTOKOC FORD')>=0)return 'FORD';
+  if(u.indexOf('VOLVO')>=0)return 'VOLVO';
+  if(u.indexOf('CITROEN')>=0||u.indexOf('CİTROEN')>=0)return 'CITROEN';
+  if(u.indexOf('PEUGEOT')>=0)return 'PEUGEOT';
+  if(u.indexOf('OPEL')>=0)return 'OPEL';
+  return 'OTOKOC_GEN';
+}
+const K_ACCS=['AVIS','AVIS_FILO','AVIS_ML','BUDGET'];
+const B_ACCS=['ALFA','CITROEN','FIAT','FORD','JEEP','MASERATI','OPEL','PEUGEOT','VOLVO','OTOKOC_GEN'];
+const ALL_MONTHS=['2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08','2026-09','2026-10','2026-11','2026-12'];
+const MO_LABELS={'2026-01':'Oca','2026-02':'Şub','2026-03':'Mar','2026-04':'Nis','2026-05':'May','2026-06':'Haz','2026-07':'Tem','2026-08':'Ağu','2026-09':'Eyl','2026-10':'Eki','2026-11':'Kas','2026-12':'Ara'};
 
 /* ── CSV PARSER ── */
-function parseCSV(text) {
+function parseCSV(text){
   var CR=String.fromCharCode(13),LF=String.fromCharCode(10);
-  var rows = [];
-  var lines = text.replace(new RegExp(CR+LF,'g'),LF).replace(new RegExp(CR,'g'),LF).split(LF);
-  for (var i=0;i<lines.length;i++) {
-    var line=lines[i], fields=[], field='', inQ=false;
-    for (var j=0;j<line.length;j++) {
+  var rows=[];
+  var lines=text.replace(new RegExp(CR+LF,'g'),LF).replace(new RegExp(CR,'g'),LF).split(LF);
+  for(var i=0;i<lines.length;i++){
+    var line=lines[i],fields=[],field='',inQ=false;
+    for(var j=0;j<line.length;j++){
       var c=line[j];
-      if (c==='"') { if(inQ&&line[j+1]==='"'){field+='"';j++;} else inQ=!inQ; }
-      else if (c===','&&!inQ) { fields.push(field); field=''; }
+      if(c==='"'){if(inQ&&line[j+1]==='"'){field+='"';j++;}else inQ=!inQ;}
+      else if(c===','&&!inQ){fields.push(field);field='';}
       else field+=c;
     }
     fields.push(field);
-    if (fields.length>1) rows.push(fields);
+    if(fields.length>1)rows.push(fields);
   }
   return rows;
 }
+function pn(s){if(!s)return 0;s=String(s).trim().replace(/\s/g,'').replace(/\./g,'').replace(',','.');return parseFloat(s)||0;}
 
-function pn(s) {
-  if (!s) return 0;
-  s = String(s).trim().replace(/\s/g,'').replace(/\./g,'').replace(',','.');
-  return parseFloat(s)||0;
-}
-
-function accountGroup(name) {
-  var u=name.toUpperCase();
-  if (u.indexOf('AVİS')>=0||u.indexOf('AVIS')>=0) return 'AVIS';
-  if (u.indexOf('VOLVO')>=0) return 'VOLVO';
-  if (u.indexOf('2.EL')>=0||u.indexOf('2EL')>=0) return '2EL';
-  return null;
-}
-
-function campName(raw, group) {
-  var sep=raw.indexOf('//')>=0?'//':'/';
-  var parts=raw.split(sep).map(function(p){return p.trim();}).filter(function(p){return p;});
-  if (group==='AVIS') {
-    if (raw.indexOf('Catalog Sales')>=0) return 'Catalog Sales';
-    if (raw.indexOf('KD Kurumsal')>=0||(raw.indexOf('Kiralama')>=0&&raw.indexOf('Lead')>=0)) return 'KD Kurumsal Kiralama';
-    return parts[2]||parts[0];
-  }
-  var skip=['omnichannel','otokoç 2. el','otokoç 2.el','otokoç','facebook + instagram','facebook','instagram','lead gen','conversion','alwayson','satış','tüm şubeler','ingage','tl','lead','traffic','otokoç ford','otokoç volvo','volvo'];
-  var months=['ocak','şubat','mart','nisan','mayıs','haziran','temmuz','ağustos','eylül','ekim','kasım','aralık'];
-  if (group==='VOLVO') {
-    var vi=-1;
-    for (var i=0;i<parts.length;i++){if(parts[i].toLowerCase()==='volvo'){vi=i;break;}}
-    if (vi>=0&&vi+1<parts.length) {
-      var c=parts[vi+1].replace(/\s*(Ocak|Şubat|Mart|Nisan|Mayıs|Haziran|Temmuz|Ağustos|Eylül|Ekim|Kasım|Aralık)\s*\d{4}.*/i,'').trim();
-      if (c) return c;
-    }
-  }
-  for (var i=0;i<parts.length;i++) {
-    var p=parts[i], pl=p.toLowerCase();
-    if (skip.indexOf(pl)>=0) continue;
-    if (months.indexOf(pl)>=0) continue;
-    if (/^\d{4}/.test(p)||/^\d+$/.test(p)) continue;
-    if (pl.indexOf('otokoç')>=0) continue;
-    if (p.length>2) return p;
-  }
-  return parts[2]||raw.slice(0,40);
-}
-
-/* ── PROCESS CSV → {daily, moCamps} ── */
-function processCSV(rows) {
-  var daily={'AVIS':{},'2EL':{},'VOLVO':{}};
-  var moCamps={'AVIS':{},'2EL':{},'VOLVO':{}};
-  for (var i=1;i<rows.length;i++) {
+/* ── PROCESS ── */
+function processCSV(rows){
+  var daily={},camps={};
+  Object.keys(ACCS).forEach(function(g){daily[g]={};camps[g]={};});
+  for(var i=1;i<rows.length;i++){
     var row=rows[i];
-    if (row.length<5) continue;
+    if(row.length<5)continue;
     var dateStr=row[0].trim();
-    if (!dateStr||!/^\d{4}/.test(dateStr)) continue;
-    var grp=accountGroup(row[1]);
-    if (!grp) continue;
-    var mo=dateStr.slice(0,7); // "2026-01"
+    if(!dateStr||!/^\d{4}/.test(dateStr))continue;
+    var accKey=accountGroup(row[1].trim());
+    if(!accKey)continue;
+    if(accKey==='__MULTI__')accKey=campToGroup(row[2]?row[2].trim():'');
+    var mo=dateStr.slice(0,7);
     var imp=pn(row[3]),cost=pn(row[4]),clk=pn(row[5]);
     var leads=row.length>9?pn(row[9]):0;
-    var r1=row.length>7?pn(row[7]):0, r2=row.length>8?pn(row[8]):0;
+    var r1=row.length>7?pn(row[7]):0,r2=row.length>8?pn(row[8]):0;
     var roas=(r1>0&&r2>0)?Math.min(r1,r2):Math.max(r1,r2);
-    // daily
-    if (!daily[grp][dateStr]) daily[grp][dateStr]={imp:0,cost:0,clk:0,rr:0,leads:0};
-    var dd=daily[grp][dateStr];
+    if(!daily[accKey][dateStr])daily[accKey][dateStr]={imp:0,cost:0,clk:0,rr:0,leads:0};
+    var dd=daily[accKey][dateStr];
     dd.imp+=imp;dd.cost+=cost;dd.clk+=clk;dd.rr+=roas*cost;dd.leads+=leads;
-    // moCamps
-    var camp=campName(row[2],grp);
-    if (!moCamps[grp][mo]) moCamps[grp][mo]={};
-    if (!moCamps[grp][mo][camp]) moCamps[grp][mo][camp]={imp:0,cost:0,clk:0,rr:0,leads:0};
-    var cc=moCamps[grp][mo][camp];
+    var camp=row[2]?row[2].trim():'';
+    // simplify camp name
+    var sep=camp.indexOf('//')>=0?'//':'/';
+    var parts=camp.split(sep).map(function(p){return p.trim();}).filter(function(p){return p;});
+    var campName=camp;
+    var skip=['omnichannel','facebook + instagram','facebook','instagram','lead gen','conversion','alwayson','satış','tüm şubeler','ingage','tl','lead','traffic','otokoç 2. el','otokoç 2.el'];
+    var months=['ocak','şubat','mart','nisan','mayıs','haziran','temmuz','ağustos','eylül','ekim','kasım','aralık'];
+    var accLow=(row[1]||'').toLowerCase();
+    for(var pi=0;pi<parts.length;pi++){
+      var p=parts[pi],pl=p.toLowerCase();
+      if(skip.indexOf(pl)>=0)continue;
+      if(months.indexOf(pl)>=0)continue;
+      if(/^\d{4}/.test(p)||/^\d+$/.test(p))continue;
+      if(accLow.indexOf(pl)>=0&&pl.length>2)continue;
+      if(p.length>2){campName=p;break;}
+    }
+    if(!camps[accKey][mo])camps[accKey][mo]={};
+    if(!camps[accKey][mo][campName])camps[accKey][mo][campName]={imp:0,cost:0,clk:0,rr:0,leads:0};
+    var cc=camps[accKey][mo][campName];
     cc.imp+=imp;cc.cost+=cost;cc.clk+=clk;cc.rr+=roas*cost;cc.leads+=leads;
   }
-  // convert to arrays
-  var out_daily={}, out_camps={};
-  ['AVIS','2EL','VOLVO'].forEach(function(g){
-    out_daily[g]=Object.keys(daily[g]).sort().map(function(dk){
+  var outD={},outC={};
+  Object.keys(ACCS).forEach(function(g){
+    outD[g]=Object.keys(daily[g]).sort().map(function(dk){
       var dd=daily[g][dk];
-      return {date:dk,imp:Math.round(dd.imp),cost:Math.round(dd.cost),clk:Math.round(dd.clk),
-              roas:dd.cost>0?Math.round(dd.rr/dd.cost*10)/10:0,
-              leads:Math.round(dd.leads),cpl:dd.leads>0?Math.round(dd.cost/dd.leads):0};
+      return{date:dk,imp:Math.round(dd.imp),cost:Math.round(dd.cost),clk:Math.round(dd.clk),
+             roas:dd.cost>0?Math.round(dd.rr/dd.cost*10)/10:0,
+             leads:Math.round(dd.leads),cpl:dd.leads>0?Math.round(dd.cost/dd.leads):0};
     });
-    out_camps[g]={};
-    Object.keys(moCamps[g]).sort().forEach(function(mo){
-      out_camps[g][mo]=Object.keys(moCamps[g][mo]).map(function(name){
-        var cc=moCamps[g][mo][name];
-        return {name:name,imp:Math.round(cc.imp),cost:Math.round(cc.cost),clk:Math.round(cc.clk),
-                roas:cc.cost>0?Math.round(cc.rr/cc.cost*10)/10:0,
-                leads:Math.round(cc.leads),cpl:cc.leads>0?Math.round(cc.cost/cc.leads):0};
+    outC[g]={};
+    Object.keys(camps[g]).sort().forEach(function(mo){
+      outC[g][mo]=Object.keys(camps[g][mo]).map(function(name){
+        var cc=camps[g][mo][name];
+        return{name:name,imp:Math.round(cc.imp),cost:Math.round(cc.cost),clk:Math.round(cc.clk),
+               roas:cc.cost>0?Math.round(cc.rr/cc.cost*10)/10:0,
+               leads:Math.round(cc.leads),cpl:cc.leads>0?Math.round(cc.cost/cc.leads):0};
       }).filter(function(c){return c.cost>0;}).sort(function(a,b){return b.cost-a.cost;});
     });
   });
-  return {daily:out_daily, moCamps:out_camps};
+  return{daily:outD,moCamps:outC};
 }
 
 /* ── STATE ── */
-var DAILY={}, MO_CAMPS={};
-var ALL_MONTHS=['2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08','2026-09','2026-10','2026-11','2026-12'];
-var MO_LABELS={'2026-01':'Oca','2026-02':'Şub','2026-03':'Mar','2026-04':'Nis','2026-05':'May','2026-06':'Haz','2026-07':'Tem','2026-08':'Ağu','2026-09':'Eyl','2026-10':'Eki','2026-11':'Kas','2026-12':'Ara'};
-var selMonths=new Set(ALL_MONTHS), granularity='monthly', activeTab='g';
+var DAILY={},MO_CAMPS={};
+Object.keys(ACCS).forEach(function(g){DAILY[g]=[];MO_CAMPS[g]={};});
+var selMonths=new Set(ALL_MONTHS),granularity='monthly',activeTab='g';
+var activeK='AVIS',activeB='FORD';
 
-/* ── FETCH & PROCESS ── */
+/* ── FETCH ── */
 function setOvMsg(t){document.getElementById('ov-msg').textContent=t;}
-
-/* JSONP — script tag ile, CORS ve file:// sorunu yok */
 function jsonpFetch(url,ms){
   return new Promise(function(resolve,reject){
     var cb='_jscb'+Date.now();
     var sc=document.createElement('script');
-    var timer=setTimeout(function(){cleanup();reject(new Error('Timeout ('+Math.round(ms/1000)+'s)'));},ms||15000);
+    var timer=setTimeout(function(){cleanup();reject(new Error('Timeout'));},ms||20000);
     function cleanup(){sc.remove();try{delete window[cb];}catch(e){}}
     window[cb]=function(data){clearTimeout(timer);cleanup();resolve(data);};
     sc.onerror=function(){clearTimeout(timer);cleanup();reject(new Error('Script yüklenemedi'));};
@@ -340,16 +337,14 @@ function jsonpFetch(url,ms){
     document.head.appendChild(sc);
   });
 }
-
 async function doRefresh(){
   document.getElementById('ov').style.display='flex';
   setOvMsg('Veriler yükleniyor…');
   try{
     var csv=await jsonpFetch(CSV_URL,20000);
     var rows=parseCSV(csv);
-    var processed=processCSV(rows);
-    DAILY=processed.daily;
-    MO_CAMPS=processed.moCamps;
+    var p=processCSV(rows);
+    DAILY=p.daily;MO_CAMPS=p.moCamps;
     document.getElementById('updtime').textContent='Güncellendi: '+new Date().toLocaleTimeString('tr-TR');
     document.getElementById('ov').style.display='none';
     renderAll();
@@ -357,34 +352,32 @@ async function doRefresh(){
     setOvMsg('Veri alınamadı: '+e.message+' — Sayfayı yenileyin.');
   }
 }
-setInterval(doRefresh, 30*60*1000);
+setInterval(doRefresh,30*60*1000);
 
-/* ── FILTER CONTROLS ── */
-function toggleMonth(btn) {
+/* ── FILTER ── */
+function toggleMonth(btn){
   var mo=btn.dataset.mo;
-  if (mo==='all') {
+  if(mo==='all'){
     selMonths=new Set(ALL_MONTHS);
     document.querySelectorAll('.mpill').forEach(function(b){b.classList.toggle('active',b.dataset.mo==='all');});
-  } else {
+  }else{
     document.querySelector('.mpill.all').classList.remove('active');
-    if (selMonths.size===ALL_MONTHS.length) { selMonths=new Set([mo]); }
-    else { if(selMonths.has(mo)){selMonths.delete(mo);if(selMonths.size===0){selMonths=new Set(ALL_MONTHS);document.querySelector('.mpill.all').classList.add('active');}} else selMonths.add(mo); }
+    if(selMonths.size===ALL_MONTHS.length){selMonths=new Set([mo]);}
+    else{if(selMonths.has(mo)){selMonths.delete(mo);if(selMonths.size===0){selMonths=new Set(ALL_MONTHS);document.querySelector('.mpill.all').classList.add('active');}}else selMonths.add(mo);}
     document.querySelectorAll('.mpill:not(.all)').forEach(function(b){b.classList.toggle('active',selMonths.has(b.dataset.mo));});
-    if (selMonths.size===ALL_MONTHS.length){document.querySelector('.mpill.all').classList.add('active');document.querySelectorAll('.mpill:not(.all)').forEach(function(b){b.classList.remove('active');});}
+    if(selMonths.size===ALL_MONTHS.length){document.querySelector('.mpill.all').classList.add('active');document.querySelectorAll('.mpill:not(.all)').forEach(function(b){b.classList.remove('active');});}
   }
   renderAll();
 }
 function setGran(btn){granularity=btn.dataset.gran;document.querySelectorAll('.gbtn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');renderAll();}
 
 /* ── DATA HELPERS ── */
-function filteredDaily(grp){return (DAILY[grp]||[]).filter(function(d){return selMonths.has(d.date.slice(0,7));});}
-
+function filteredDaily(grp){return(DAILY[grp]||[]).filter(function(d){return selMonths.has(d.date.slice(0,7));});}
 function weekKey(ds){var d=new Date(ds),dow=(d.getDay()+6)%7,m=new Date(d);m.setDate(d.getDate()-dow);return m.toISOString().slice(0,10);}
 function weekLabel(ds){var d=new Date(ds),dow=(d.getDay()+6)%7,m=new Date(d);m.setDate(d.getDate()-dow);var mo=String(m.getMonth()+1).padStart(2,'0');return String(m.getDate()).padStart(2,'0')+' '+(MO_LABELS['2026-'+mo]||mo);}
-
 function aggregateByGran(rows){
-  if (granularity==='daily') return rows.map(function(r){return Object.assign({},r,{label:r.date.slice(5).replace('-','.')});});
-  if (granularity==='weekly'){
+  if(granularity==='daily')return rows.map(function(r){return Object.assign({},r,{label:r.date.slice(5).replace('-','.')});});
+  if(granularity==='weekly'){
     var wk={};
     rows.forEach(function(r){var k=weekKey(r.date);if(!wk[k])wk[k]={label:weekLabel(r.date),imp:0,cost:0,clk:0,rr:0,leads:0};wk[k].imp+=r.imp;wk[k].cost+=r.cost;wk[k].clk+=r.clk;wk[k].rr+=(r.roas||0)*r.cost;wk[k].leads+=r.leads;});
     return Object.keys(wk).sort().filter(function(k){return wk[k].cost>0||wk[k].leads>0;}).map(function(k){return Object.assign({},wk[k],{roas:wk[k].cost>0?Math.round(wk[k].rr/wk[k].cost*10)/10:0,cpl:wk[k].leads>0?Math.round(wk[k].cost/wk[k].leads):0});});
@@ -393,7 +386,6 @@ function aggregateByGran(rows){
   rows.forEach(function(r){var k=r.date.slice(0,7);if(!mm[k])mm[k]={label:MO_LABELS[k]||k,imp:0,cost:0,clk:0,rr:0,leads:0};mm[k].imp+=r.imp;mm[k].cost+=r.cost;mm[k].clk+=r.clk;mm[k].rr+=(r.roas||0)*r.cost;mm[k].leads+=r.leads;});
   return Object.keys(mm).sort().filter(function(k){return mm[k].cost>0||mm[k].leads>0;}).map(function(k){return Object.assign({},mm[k],{roas:mm[k].cost>0?Math.round(mm[k].rr/mm[k].cost*10)/10:0,cpl:mm[k].leads>0?Math.round(mm[k].cost/mm[k].leads):0});});
 }
-
 function campData(grp){
   var merged={};
   [...selMonths].sort().forEach(function(mo){
@@ -405,84 +397,184 @@ function campData(grp){
   });
   return Object.values(merged).filter(function(c){return c.cost>0;}).sort(function(a,b){return b.cost-a.cost;}).map(function(c){return Object.assign({},c,{roas:c.cost>0?Math.round(c.rr/c.cost*10)/10:0,cpl:c.leads>0?Math.round(c.cost/c.leads):0});});
 }
-
 function totals(rows){var t={imp:0,cost:0,clk:0,rr:0,leads:0};rows.forEach(function(r){t.imp+=r.imp;t.cost+=r.cost;t.clk+=r.clk;t.rr+=(r.roas||0)*r.cost;t.leads+=r.leads;});return Object.assign(t,{roas:t.cost>0?Math.round(t.rr/t.cost*10)/10:0,cpl:t.leads>0?Math.round(t.cost/t.leads):0});}
-
-function periodLabel(){
-  var mos=[...selMonths].sort();
-  var hasDat=function(mo){return (DAILY.AVIS||[]).some(function(d){return d.date.slice(0,7)===mo;});};
-  var dm=mos.filter(hasDat);
-  if(mos.length===ALL_MONTHS.length)return dm.length>0?'2026 YTD ('+MO_LABELS[dm[0]]+' – '+MO_LABELS[dm[dm.length-1]]+')':'2026 Tüm Yıl';
-  if(mos.length===1)return MO_LABELS[mos[0]]+' 2026';
-  return MO_LABELS[mos[0]]+' – '+MO_LABELS[mos[mos.length-1]]+' 2026';
-}
 
 /* ── FORMATTERS ── */
 var fTL=function(n){return '₺'+Math.round(n).toLocaleString('tr-TR');};
 var fN=function(n){return Math.round(n).toLocaleString('tr-TR');};
-var fR=function(n){return n>0?n.toFixed(1)+'x':'—';};
 function pillCpl(v,ref){if(!v)return '<span class="pill pna">—</span>';if(v<=ref*.7)return '<span class="pill phi">'+fTL(v)+'</span>';if(v<=ref*1.3)return '<span class="pill pmi">'+fTL(v)+'</span>';return '<span class="pill plo">'+fTL(v)+'</span>';}
-function pillRoas(r){if(!r)return '<span class="pill pna">—</span>';if(r>=15)return '<span class="pill phi">'+r.toFixed(1)+'x</span>';if(r>=5)return '<span class="pill pmi">'+r.toFixed(1)+'x</span>';return '<span class="pill plo">'+r.toFixed(1)+'x</span>';}
-function mkBar(v,max,col){var w=max>0?Math.min(Math.round(v/max*65),65):0;return '<div class="br">'+fTL(v)+'<div class="bg"><div class="bf" style="width:'+w+'px;background:'+col+'"></div></div></div>';}
+function mkBar(v,max,col){var w=max>0?Math.min(Math.round(v/max*55),55):0;return '<div class="br">'+fTL(v)+'<div class="bg"><div class="bf" style="width:'+w+'px;background:'+col+'"></div></div></div>';}
 
 /* ── CHARTS ── */
 var CR={};
-function mk(id,type,data,opts){if(CR[id])CR[id].destroy();var el=document.getElementById(id);if(!el)return;CR[id]=new Chart(el,{type:type,data:data,options:Object.assign({responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:9}}}},opts)});}
+function mk(id,type,data,opts){if(CR[id])CR[id].destroy();var el=document.getElementById(id);if(!el)return;CR[id]=new Chart(el,{type:type,data:data,options:Object.assign({responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:8}}}},opts)});}
 var xo={scales:{x:{ticks:{font:{size:9},maxRotation:45}},y:{beginAtZero:true,ticks:{font:{size:9}}}}};
 var tlo={scales:{x:{ticks:{font:{size:9},maxRotation:45}},y:{beginAtZero:true,ticks:{font:{size:9},callback:function(v){return '₺'+v.toLocaleString('tr-TR');}}}}};
 var cpo={scales:{x:{ticks:{font:{size:9},maxRotation:45}},y:{beginAtZero:true,ticks:{font:{size:9},callback:function(v){return '₺'+v;}}}}};
 
-/* ── RENDER ── */
+/* ── GENEL BAKIŞ ── */
 function renderG(){
-  var aD=filteredDaily('AVIS'),kD=filteredDaily('2EL'),vD=filteredDaily('VOLVO');
-  var aT=totals(aD),kT=totals(kD),vT=totals(vD);
-  var aC=campData('AVIS'),kC=campData('2EL'),vC=campData('VOLVO');
-  var agg_a=aggregateByGran(aD),agg_k=aggregateByGran(kD),agg_v=aggregateByGran(vD);
-  var catC=aC.find(function(c){return c.name==='Catalog Sales';}),kdC=aC.find(function(c){return c.name==='KD Kurumsal Kiralama';});
-  document.getElementById('ga-sp').textContent=fTL(aT.cost);
-  document.getElementById('ga-roas').textContent=fR(catC?catC.roas:0);
-  document.getElementById('ga-leads').textContent=kdC?fN(kdC.leads):'—';
-  document.getElementById('ga-cpl').textContent=kdC&&kdC.leads>0?fTL(Math.round(kdC.cost/kdC.leads)):'—';
-  document.getElementById('gk-sp').textContent=fTL(kT.cost);document.getElementById('gk-leads').textContent=fN(kT.leads);document.getElementById('gk-cpl').textContent=kT.cpl?fTL(kT.cpl):'—';document.getElementById('gk-camps').textContent=kC.length;
-  document.getElementById('gv-sp').textContent=fTL(vT.cost);document.getElementById('gv-leads').textContent=fN(vT.leads);document.getElementById('gv-cpl').textContent=vT.cpl?fTL(vT.cpl):'—';document.getElementById('gv-camps').textContent=vC.length;
-  var lbl=agg_a.map(function(r){return r.label;});
-  mk('g-sp','bar',{labels:lbl,datasets:[{label:'AVİS',data:agg_a.map(function(r){return r.cost;}),backgroundColor:'#e63946',stack:'s'},{label:'2.El',data:agg_k.map(function(r){return r.cost;}),backgroundColor:'#f4a261',stack:'s'},{label:'Volvo',data:agg_v.map(function(r){return r.cost;}),backgroundColor:'#2a9d8f',stack:'s'}]},{scales:{x:{stacked:true,ticks:{font:{size:9},maxRotation:45}},y:{stacked:true,beginAtZero:true,ticks:{font:{size:9},callback:function(v){return '₺'+v.toLocaleString('tr-TR');}}}}});
-  mk('g-pie','doughnut',{labels:['AVİS','2.El','Volvo'],datasets:[{data:[aT.cost,kT.cost,vT.cost],backgroundColor:['#e63946','#f4a261','#2a9d8f'],borderWidth:2,borderColor:'#fff'}]},{plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return fTL(c.raw);}}}}});
-  mk('g-lk','bar',{labels:agg_k.map(function(r){return r.label;}),datasets:[{label:'Lead',data:agg_k.map(function(r){return r.leads;}),backgroundColor:'#f4a261'}]},xo);
-  mk('g-lv','bar',{labels:agg_v.map(function(r){return r.label;}),datasets:[{label:'Lead',data:agg_v.map(function(r){return r.leads;}),backgroundColor:'#2a9d8f'}]},xo);
-}
-function renderA(){
-  var fd=filteredDaily('AVIS'),agg=aggregateByGran(fd),t=totals(fd),lbl=agg.map(function(r){return r.label;});
-  var aC=campData('AVIS'),catC=aC.find(function(c){return c.name==='Catalog Sales';}),kdC=aC.find(function(c){return c.name==='KD Kurumsal Kiralama';});
-  document.getElementById('a-sp').textContent=fTL(t.cost);document.getElementById('a-sp-s').textContent=periodLabel();document.getElementById('a-roas').textContent=fR(t.roas);document.getElementById('a-leads').textContent=kdC?fN(kdC.leads):'—';document.getElementById('a-cpl').textContent=kdC&&kdC.leads>0?fTL(Math.round(kdC.cost/kdC.leads)):'—';
-  mk('a-roas-c','line',{labels:lbl,datasets:[{label:'ROAS',data:agg.map(function(r){return r.roas||null;}),borderColor:'#2a9d8f',backgroundColor:'rgba(42,157,143,.12)',tension:.35,pointRadius:4,spanGaps:true}]},{scales:{x:{ticks:{font:{size:9},maxRotation:45}},y:{beginAtZero:true,ticks:{font:{size:9},callback:function(v){return v+'x';}}}}});
-  mk('a-lead-c','bar',{labels:lbl,datasets:[{label:'Lead',data:agg.map(function(r){return r.leads;}),backgroundColor:'#457b9d',yAxisID:'y'},{label:'CPL (₺)',data:agg.map(function(r){return r.cpl||null;}),type:'line',borderColor:'#e63946',backgroundColor:'transparent',tension:.3,pointRadius:3,spanGaps:true,yAxisID:'y1'}]},{scales:{x:{ticks:{font:{size:9},maxRotation:45}},y:{beginAtZero:true,ticks:{font:{size:9}}},y1:{type:'linear',position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{font:{size:9},callback:function(v){return '₺'+v;}}}}});
-  var cs=catC&&kdC&&(catC.cost+kdC.cost)>0?catC.cost/(catC.cost+kdC.cost):0.55;
-  mk('a-sp-c','bar',{labels:lbl,datasets:[{label:'Catalog Sales',data:agg.map(function(r){return r.cost*cs;}),backgroundColor:'#e63946',stack:'s'},{label:'KD Kurumsal',data:agg.map(function(r){return r.cost*(1-cs);}),backgroundColor:'#457b9d',stack:'s'}]},tlo);
-  var tb=document.getElementById('a-tbl');tb.innerHTML='';aC.forEach(function(c){var cv=c.leads>0?Math.round(c.cost/c.leads):0;tb.innerHTML+='<tr><td>'+c.name+'</td><td>'+fTL(c.cost)+'</td><td>'+(c.leads?fN(c.leads):'—')+'</td><td>'+(cv?fTL(cv):'—')+'</td><td>'+pillRoas(c.roas)+'</td><td>'+fN(c.clk)+'</td></tr>';});
-}
-function renderK(){
-  var fd=filteredDaily('2EL'),agg=aggregateByGran(fd),t=totals(fd),lbl=agg.map(function(r){return r.label;});
-  var kC=campData('2EL');
-  document.getElementById('k-sp').textContent=fTL(t.cost);document.getElementById('k-sp-s').textContent=periodLabel();document.getElementById('k-leads').textContent=fN(t.leads);document.getElementById('k-cpl').textContent=t.cpl?fTL(t.cpl):'—';document.getElementById('k-clk').textContent=fN(t.clk);
-  mk('k-lead-c','bar',{labels:lbl,datasets:[{label:'Lead',data:agg.map(function(r){return r.leads;}),backgroundColor:'#f4a261'}]},xo);
-  mk('k-cpl-c','line',{labels:lbl,datasets:[{label:'CPL (₺)',data:agg.map(function(r){return r.cpl||null;}),borderColor:'#f4a261',backgroundColor:'rgba(244,162,97,.15)',tension:.35,pointRadius:4,spanGaps:true}]},cpo);
-  mk('k-sp-c','bar',{labels:lbl,datasets:[{label:'Harcama',data:agg.map(function(r){return r.cost;}),backgroundColor:'#f4a261'}]},tlo);
-  var avgCpl=t.cpl,maxCost=kC[0]?kC[0].cost:1,tb=document.getElementById('k-tbl');tb.innerHTML='';kC.forEach(function(c){var cv=c.leads>0?Math.round(c.cost/c.leads):0;tb.innerHTML+='<tr><td>'+c.name+'</td><td>'+mkBar(c.cost,maxCost,'#f4a261')+'</td><td>'+(c.leads?fN(c.leads):'—')+'</td><td>'+pillCpl(cv,avgCpl)+'</td><td>'+fN(c.clk)+'</td></tr>';});
-}
-function renderV(){
-  var fd=filteredDaily('VOLVO'),agg=aggregateByGran(fd),t=totals(fd),lbl=agg.map(function(r){return r.label;});
-  var vC=campData('VOLVO');
-  document.getElementById('v-sp').textContent=fTL(t.cost);document.getElementById('v-sp-s').textContent=periodLabel();document.getElementById('v-leads').textContent=fN(t.leads);document.getElementById('v-cpl').textContent=t.cpl?fTL(t.cpl):'—';document.getElementById('v-clk').textContent=fN(t.clk);
-  mk('v-lead-c','bar',{labels:lbl,datasets:[{label:'Lead',data:agg.map(function(r){return r.leads;}),backgroundColor:'#2a9d8f'}]},xo);
-  mk('v-cpl-c','line',{labels:lbl,datasets:[{label:'CPL (₺)',data:agg.map(function(r){return r.cpl||null;}),borderColor:'#2a9d8f',backgroundColor:'rgba(42,157,143,.15)',tension:.35,pointRadius:4,spanGaps:true}]},cpo);
-  mk('v-sp-c','bar',{labels:lbl,datasets:[{label:'Harcama',data:agg.map(function(r){return r.cost;}),backgroundColor:'#2a9d8f'}]},tlo);
-  var avgCpl=t.cpl,maxCost=vC[0]?vC[0].cost:1,tb=document.getElementById('v-tbl');tb.innerHTML='';vC.forEach(function(c){var cv=c.leads>0?Math.round(c.cost/c.leads):0;tb.innerHTML+='<tr><td>'+c.name+'</td><td>'+mkBar(c.cost,maxCost,'#2a9d8f')+'</td><td>'+(c.leads?fN(c.leads):'—')+'</td><td>'+pillCpl(cv,avgCpl)+'</td><td>'+fN(c.clk)+'</td></tr>';});
+  var accKeys=Object.keys(ACCS);
+  var totalsMap={};
+  accKeys.forEach(function(g){totalsMap[g]=totals(filteredDaily(g));});
+  // mini cards
+  var cards=document.getElementById('g-minicards');
+  cards.innerHTML='';
+  accKeys.forEach(function(g){
+    var t=totalsMap[g];
+    if(t.cost===0)return;
+    var col=ACCS[g].color;
+    cards.innerHTML+='<div class="g-mini" style="border-color:'+col+'"><div class="gm-name">'+ACCS[g].name+'</div><div class="gm-sp" style="color:'+col+'">'+fTL(t.cost)+'</div><div class="gm-sub">Lead: '+fN(t.leads)+(t.cpl?' · CPL: '+fTL(t.cpl):'')+'</div></div>';
+  });
+  // stacked spend chart - use monthly agg
+  var allDates=new Set();
+  accKeys.forEach(function(g){filteredDaily(g).forEach(function(r){allDates.add(r.date);});});
+  var agg2={};
+  accKeys.forEach(function(g){
+    var rows=filteredDaily(g);
+    if(!rows.length)return;
+    var a=aggregateByGran(rows);
+    agg2[g]=a;
+  });
+  // get labels from largest account
+  var mainG='2EL';
+  var labels=(agg2[mainG]||[]).map(function(r){return r.label;});
+  if(!labels.length){
+    var firstG=accKeys.find(function(g){return agg2[g]&&agg2[g].length;});
+    if(firstG)labels=(agg2[firstG]||[]).map(function(r){return r.label;});
+  }
+  var spDs=[];
+  var visAccs=accKeys.filter(function(g){return totalsMap[g].cost>0;});
+  visAccs.forEach(function(g){
+    var a=agg2[g]||[];
+    var labelMap={};
+    a.forEach(function(r){labelMap[r.label]=r.cost;});
+    spDs.push({label:ACCS[g].name,data:labels.map(function(l){return labelMap[l]||0;}),backgroundColor:ACCS[g].color,stack:'s'});
+  });
+  mk('g-sp','bar',{labels:labels,datasets:spDs},{scales:{x:{stacked:true,ticks:{font:{size:9},maxRotation:45}},y:{stacked:true,beginAtZero:true,ticks:{font:{size:9},callback:function(v){return '₺'+v.toLocaleString('tr-TR');}}}}});
+  mk('g-pie','doughnut',{labels:visAccs.map(function(g){return ACCS[g].name;}),datasets:[{data:visAccs.map(function(g){return totalsMap[g].cost;}),backgroundColor:visAccs.map(function(g){return ACCS[g].color;}),borderWidth:2,borderColor:'#fff'}]},{plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:10}}}});
+  // leads bar
+  mk('g-leads','bar',{labels:labels,datasets:visAccs.filter(function(g){return totalsMap[g].leads>0;}).map(function(g){var a=agg2[g]||[];var lm={};a.forEach(function(r){lm[r.label]=r.leads;});return{label:ACCS[g].name,data:labels.map(function(l){return lm[l]||0;}),backgroundColor:ACCS[g].color,stack:'s'};})},{scales:{x:{stacked:true,ticks:{font:{size:9},maxRotation:45}},y:{stacked:true,beginAtZero:true,ticks:{font:{size:9}}}}});
+  // comparison bar (total cost per account)
+  mk('g-cmp','bar',{labels:visAccs.map(function(g){return ACCS[g].name;}),datasets:[{label:'Harcama',data:visAccs.map(function(g){return totalsMap[g].cost;}),backgroundColor:visAccs.map(function(g){return ACCS[g].color;})}]},{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9},callback:function(v){return '₺'+v.toLocaleString('tr-TR');}}},y:{ticks:{font:{size:9}}}}});
 }
 
-var RENDERERS={g:renderG,a:renderA,k:renderK,v:renderV};
-function renderAll(){document.getElementById('hdrsub').textContent=periodLabel()+' · Facebook & Instagram';RENDERERS[activeTab]&&RENDERERS[activeTab]();}
-function goTab(name,btn){document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active');});document.getElementById('tab-'+name).classList.add('active');btn.classList.add('active');activeTab=name;RENDERERS[name]&&RENDERERS[name]();}
+/* ── ACCOUNT CONTENT (Kiralama & Bayiler ortak renderer) ── */
+function renderAccount(grp,containerId){
+  var fd=filteredDaily(grp),agg=aggregateByGran(fd),t=totals(fd),lbl=agg.map(function(r){return r.label;});
+  var camps=campData(grp),col=ACCS[grp].color;
+  var avgCpl=t.cpl,maxCost=camps[0]?camps[0].cost:1;
+  var el=document.getElementById(containerId);
+  if(!el)return;
+  el.innerHTML=
+    '<div class="krow k4">'+
+    '<div class="kpi" style="border-color:'+col+'"><div class="kl">Harcama</div><div class="kv">'+fTL(t.cost)+'</div><div class="ks">Seçili dönem</div></div>'+
+    '<div class="kpi" style="border-color:#00b8d4"><div class="kl">Toplam Lead</div><div class="kv">'+fN(t.leads)+'</div><div class="ks">On-Facebook</div></div>'+
+    '<div class="kpi" style="border-color:#e07ab1"><div class="kl">Ort. CPL</div><div class="kv">'+(t.cpl?fTL(t.cpl):'—')+'</div><div class="ks">Lead başına maliyet</div></div>'+
+    '<div class="kpi" style="border-color:#888"><div class="kl">Tıklama</div><div class="kv">'+fN(t.clk)+'</div><div class="ks">Tüm kampanyalar</div></div>'+
+    '</div>'+
+    '<div class="crow ceq">'+
+    '<div class="cc"><h3>Lead Sayısı</h3><div class="cw"><canvas id="ac-lead-'+grp+'"></canvas></div></div>'+
+    '<div class="cc"><h3>CPL (₺)</h3><div class="cw"><canvas id="ac-cpl-'+grp+'"></canvas></div></div>'+
+    '</div>'+
+    '<div class="crow c1"><div class="cc"><h3>Harcama (₺)</h3><div class="cw"><canvas id="ac-sp-'+grp+'"></canvas></div></div></div>'+
+    '<div class="tw"><h3>Kampanya Performansı</h3><table><thead><tr><th>Kampanya</th><th>Harcama</th><th>Lead</th><th>CPL</th><th>Tıklama</th></tr></thead><tbody id="ac-tbl-'+grp+'"></tbody></table></div>';
+  mk('ac-lead-'+grp,'bar',{labels:lbl,datasets:[{label:'Lead',data:agg.map(function(r){return r.leads;}),backgroundColor:col}]},xo);
+  mk('ac-cpl-'+grp,'line',{labels:lbl,datasets:[{label:'CPL (₺)',data:agg.map(function(r){return r.cpl||null;}),borderColor:col,backgroundColor:col+'22',tension:.35,pointRadius:3,spanGaps:true}]},cpo);
+  mk('ac-sp-'+grp,'bar',{labels:lbl,datasets:[{label:'Harcama',data:agg.map(function(r){return r.cost;}),backgroundColor:col}]},tlo);
+  var tb=document.getElementById('ac-tbl-'+grp);
+  if(tb)camps.forEach(function(c){var cv=c.leads>0?Math.round(c.cost/c.leads):0;tb.innerHTML+='<tr><td>'+c.name+'</td><td>'+mkBar(c.cost,maxCost,col)+'</td><td>'+(c.leads?fN(c.leads):'—')+'</td><td>'+pillCpl(cv,avgCpl)+'</td><td>'+fN(c.clk)+'</td></tr>';});
+}
+
+/* ── KİRALAMA ── */
+function buildKstabs(){
+  var el=document.getElementById('k-stabs');
+  if(!el||el.children.length)return;
+  K_ACCS.forEach(function(g){
+    var btn=document.createElement('button');
+    btn.className='stab'+(g===activeK?' active':'');
+    btn.textContent=ACCS[g].name;
+    btn.style.setProperty('--c',ACCS[g].color);
+    if(g===activeK){btn.style.background=ACCS[g].color;btn.style.color='#fff';}
+    btn.onclick=function(){
+      activeK=g;
+      document.querySelectorAll('#k-stabs .stab').forEach(function(b,i){
+        var gk=K_ACCS[i];
+        b.classList.toggle('active',gk===g);
+        b.style.background=gk===g?ACCS[gk].color:'';
+        b.style.color=gk===g?'#fff':'';
+      });
+      renderK();
+    };
+    el.appendChild(btn);
+  });
+}
+function renderK(){
+  var content=document.getElementById('k-content');
+  content.innerHTML='<div id="k-acc-inner"></div>';
+  renderAccount(activeK,'k-acc-inner');
+}
+
+/* ── 2.EL ── */
+function render2El(){
+  var fd=filteredDaily('2EL'),agg=aggregateByGran(fd),t=totals(fd),lbl=agg.map(function(r){return r.label;});
+  var camps=campData('2EL'),col='#457b9d',avgCpl=t.cpl,maxCost=camps[0]?camps[0].cost:1;
+  document.getElementById('e-sp').textContent=fTL(t.cost);
+  document.getElementById('e-leads').textContent=fN(t.leads);
+  document.getElementById('e-cpl').textContent=t.cpl?fTL(t.cpl):'—';
+  document.getElementById('e-clk').textContent=fN(t.clk);
+  mk('e-lead-c','bar',{labels:lbl,datasets:[{label:'Lead',data:agg.map(function(r){return r.leads;}),backgroundColor:col}]},xo);
+  mk('e-cpl-c','line',{labels:lbl,datasets:[{label:'CPL (₺)',data:agg.map(function(r){return r.cpl||null;}),borderColor:col,backgroundColor:col+'22',tension:.35,pointRadius:3,spanGaps:true}]},cpo);
+  mk('e-sp-c','bar',{labels:lbl,datasets:[{label:'Harcama',data:agg.map(function(r){return r.cost;}),backgroundColor:col}]},tlo);
+  var tb=document.getElementById('e-tbl');tb.innerHTML='';
+  camps.forEach(function(c){var cv=c.leads>0?Math.round(c.cost/c.leads):0;tb.innerHTML+='<tr><td>'+c.name+'</td><td>'+mkBar(c.cost,maxCost,col)+'</td><td>'+(c.leads?fN(c.leads):'—')+'</td><td>'+pillCpl(cv,avgCpl)+'</td><td>'+fN(c.clk)+'</td></tr>';});
+}
+
+/* ── BAYİLER ── */
+function buildBstabs(){
+  var el=document.getElementById('b-stabs');
+  if(!el||el.children.length)return;
+  B_ACCS.forEach(function(g){
+    var btn=document.createElement('button');
+    btn.className='stab'+(g===activeB?' active':'');
+    btn.textContent=ACCS[g].name;
+    if(g===activeB){btn.style.background=ACCS[g].color;btn.style.color='#fff';}
+    btn.onclick=function(){
+      activeB=g;
+      document.querySelectorAll('#b-stabs .stab').forEach(function(b,i){
+        var gk=B_ACCS[i];
+        b.classList.toggle('active',gk===g);
+        b.style.background=gk===g?ACCS[gk].color:'';
+        b.style.color=gk===g?'#fff':'';
+      });
+      renderB();
+    };
+    el.appendChild(btn);
+  });
+}
+function renderB(){
+  var content=document.getElementById('b-content');
+  content.innerHTML='<div id="b-acc-inner"></div>';
+  renderAccount(activeB,'b-acc-inner');
+}
+
+/* ── MAIN RENDER ── */
+function renderAll(){
+  if(activeTab==='g')renderG();
+  else if(activeTab==='k'){buildKstabs();renderK();}
+  else if(activeTab==='e')render2El();
+  else if(activeTab==='b'){buildBstabs();renderB();}
+}
+function goTab(name,btn){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  activeTab=name;
+  if(name==='k')buildKstabs();
+  if(name==='b')buildBstabs();
+  renderAll();
+}
 
 doRefresh();
 </script>
