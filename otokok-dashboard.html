@@ -290,7 +290,7 @@ function processCSV(rows){
     var mo=dateStr.slice(0,7);
     var imp=pn(row[3]),cost=pn(row[4]),clk=pn(row[5]);
     var leads=row.length>9?pn(row[9]):0;
-    var r1=row.length>7?pn(row[7]):0,r2=row.length>8?pn(row[8]):0;
+    var r1=row.length>10?pn(row[10]):0,r2=row.length>11?pn(row[11]):0;
     var roas=(r1>0&&r2>0)?Math.min(r1,r2):Math.max(r1,r2);
     if(!daily[accKey][dateStr])daily[accKey][dateStr]={imp:0,cost:0,clk:0,rr:0,leads:0};
     var dd=daily[accKey][dateStr];
@@ -498,6 +498,10 @@ function renderG(){
 }
 
 /* ── ACCOUNT CONTENT (Kiralama & Bayiler ortak renderer) ── */
+var roo={scales:{x:{ticks:{font:{size:9},maxRotation:45}},y:{beginAtZero:true,ticks:{font:{size:9},callback:function(v){return v+'x';}}}}};
+function pillRoas(v){if(!v||v===0)return '<span class="pill pna">—</span>';if(v>=3)return '<span class="pill phi">'+v+'x</span>';if(v>=1)return '<span class="pill pmi">'+v+'x</span>';return '<span class="pill plo">'+v+'x</span>';}
+
+/* Bayiler için basit render */
 function renderAccount(grp,containerId){
   var fd=filteredDaily(grp),agg=aggregateByGran(fd),t=totals(fd),lbl=agg.map(function(r){return r.label;});
   var camps=campData(grp),col=ACCS[grp].color;
@@ -522,6 +526,37 @@ function renderAccount(grp,containerId){
   mk('ac-sp-'+grp,'bar',{labels:lbl,datasets:[{label:'Harcama',data:agg.map(function(r){return r.cost;}),backgroundColor:col}]},tlo);
   var tb=document.getElementById('ac-tbl-'+grp);
   if(tb)camps.forEach(function(c){var cv=c.leads>0?Math.round(c.cost/c.leads):0;tb.innerHTML+='<tr><td>'+c.name+'</td><td>'+mkBar(c.cost,maxCost,col)+'</td><td>'+(c.leads?fN(c.leads):'—')+'</td><td>'+pillCpl(cv,avgCpl)+'</td><td>'+fN(c.clk)+'</td></tr>';});
+}
+
+/* Kiralama için ROAS'lı render */
+function renderKiralamaAccount(grp,containerId){
+  var fd=filteredDaily(grp),agg=aggregateByGran(fd),t=totals(fd),lbl=agg.map(function(r){return r.label;});
+  var camps=campData(grp),col=ACCS[grp].color;
+  var avgCpl=t.cpl,maxCost=camps[0]?camps[0].cost:1;
+  var el=document.getElementById(containerId);
+  if(!el)return;
+  var roasColor='#f4a261';
+  el.innerHTML=
+    '<div class="krow" style="grid-template-columns:repeat(5,1fr)">'+
+    '<div class="kpi" style="border-color:'+col+'"><div class="kl">Harcama</div><div class="kv">'+fTL(t.cost)+'</div><div class="ks">Seçili dönem</div></div>'+
+    '<div class="kpi" style="border-color:'+roasColor+'"><div class="kl">Ort. ROAS</div><div class="kv" style="color:'+roasColor+'">'+(t.roas?t.roas+'x':'—')+'</div><div class="ks">Harcama karşılığı gelir</div></div>'+
+    '<div class="kpi" style="border-color:#00b8d4"><div class="kl">Toplam Lead</div><div class="kv">'+fN(t.leads)+'</div><div class="ks">On-Facebook</div></div>'+
+    '<div class="kpi" style="border-color:#e07ab1"><div class="kl">Ort. CPL</div><div class="kv">'+(t.cpl?fTL(t.cpl):'—')+'</div><div class="ks">Lead başına maliyet</div></div>'+
+    '<div class="kpi" style="border-color:#888"><div class="kl">Tıklama</div><div class="kv">'+fN(t.clk)+'</div><div class="ks">Tüm kampanyalar</div></div>'+
+    '</div>'+
+    '<div class="crow c3">'+
+    '<div class="cc"><h3>ROAS</h3><div class="cw"><canvas id="ac-roas-'+grp+'"></canvas></div></div>'+
+    '<div class="cc"><h3>Lead Sayısı</h3><div class="cw"><canvas id="ac-lead-'+grp+'"></canvas></div></div>'+
+    '<div class="cc"><h3>CPL (₺)</h3><div class="cw"><canvas id="ac-cpl-'+grp+'"></canvas></div></div>'+
+    '</div>'+
+    '<div class="crow c1"><div class="cc"><h3>Harcama (₺)</h3><div class="cw"><canvas id="ac-sp-'+grp+'"></canvas></div></div></div>'+
+    '<div class="tw"><h3>Kampanya Performansı</h3><table><thead><tr><th>Kampanya</th><th>Harcama</th><th>ROAS</th><th>Lead</th><th>CPL</th></tr></thead><tbody id="ac-tbl-'+grp+'"></tbody></table></div>';
+  mk('ac-roas-'+grp,'line',{labels:lbl,datasets:[{label:'ROAS',data:agg.map(function(r){return r.roas||null;}),borderColor:roasColor,backgroundColor:roasColor+'33',tension:.35,pointRadius:3,fill:true,spanGaps:true}]},roo);
+  mk('ac-lead-'+grp,'bar',{labels:lbl,datasets:[{label:'Lead',data:agg.map(function(r){return r.leads;}),backgroundColor:col}]},xo);
+  mk('ac-cpl-'+grp,'line',{labels:lbl,datasets:[{label:'CPL (₺)',data:agg.map(function(r){return r.cpl||null;}),borderColor:col,backgroundColor:col+'22',tension:.35,pointRadius:3,spanGaps:true}]},cpo);
+  mk('ac-sp-'+grp,'bar',{labels:lbl,datasets:[{label:'Harcama',data:agg.map(function(r){return r.cost;}),backgroundColor:col}]},tlo);
+  var tb=document.getElementById('ac-tbl-'+grp);
+  if(tb)camps.forEach(function(c){var cv=c.leads>0?Math.round(c.cost/c.leads):0;tb.innerHTML+='<tr><td>'+c.name+'</td><td>'+mkBar(c.cost,maxCost,col)+'</td><td>'+pillRoas(c.roas)+'</td><td>'+(c.leads?fN(c.leads):'—')+'</td><td>'+pillCpl(cv,avgCpl)+'</td></tr>';});
 }
 
 /* ── KİRALAMA ── */
@@ -550,7 +585,7 @@ function buildKstabs(){
 function renderK(){
   var content=document.getElementById('k-content');
   content.innerHTML='<div id="k-acc-inner"></div>';
-  renderAccount(activeK,'k-acc-inner');
+  renderKiralamaAccount(activeK,'k-acc-inner');
 }
 
 /* ── 2.EL ── */
